@@ -1,6 +1,13 @@
 <?php
-require('../fpdf/fpdf.php');
+session_start();
 include '../config/koneksi.php';
+
+if (!isset($_SESSION['username'])) {
+    header("Location: ../login.php");
+    exit;
+}
+
+require('../fpdf.php');
 
 $pdf = new FPDF();
 $pdf->AddPage();

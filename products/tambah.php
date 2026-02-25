@@ -8,15 +8,31 @@ if (!isset($_SESSION['username'])) {
 }
 
 if (isset($_POST['simpan'])) {
-    $code = $_POST['code'];
-    $name = $_POST['name'];
-    $stock = $_POST['stock'];
-    $price = $_POST['price'];
+    $code = trim($_POST['code']);
+    $name = trim($_POST['name']);
+    $stock = (int)$_POST['stock'];
+    $price = (float)$_POST['price'];
 
-    mysqli_query($conn, "INSERT INTO products (code,name,stock,price) 
-    VALUES ('$code','$name','$stock','$price')");
-
-    header("Location: index.php");
+    // Validasi input
+    if (empty($code) || empty($name)) {
+        $_SESSION['error'] = "Kode dan Nama tidak boleh kosong";
+    } elseif ($stock < 0) {
+        $_SESSION['error'] = "Stock tidak boleh negatif";
+    } elseif ($price < 0) {
+        $_SESSION['error'] = "Harga tidak boleh negatif";
+    } else {
+        // Cek duplikasi kode
+        $cek_kode = mysqli_query($conn, "SELECT * FROM products WHERE code = '$code'");
+        if (mysqli_num_rows($cek_kode) > 0) {
+            $_SESSION['error'] = "Kode produk sudah digunakan!";
+        } else {
+            mysqli_query($conn, "INSERT INTO products (code,name,stock,price) 
+            VALUES ('$code','$name','$stock','$price')");
+            $_SESSION['success'] = "Produk berhasil ditambahkan";
+            header("Location: index.php");
+            exit;
+        }
+    }
 }
 ?>
 
@@ -57,6 +73,12 @@ if (isset($_POST['simpan'])) {
 
 <div class="p-4 w-100">
     <h3>Tambah Produk</h3>
+
+    <!-- Tampilkan Pesan Error -->
+    <?php if (isset($_SESSION['error'])): ?>
+        <div class="alert alert-danger"><?= $_SESSION['error']; ?></div>
+        <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
 
     <form method="POST">
         <div class="mb-3">

@@ -52,6 +52,18 @@ ORDER BY t.date DESC
 
 <div class="p-4 w-100">
     <h3>Data Transaksi</h3>
+    
+    <!-- Tampilkan Pesan Sukses/Error -->
+    <?php if (isset($_SESSION['success'])): ?>
+        <div class="alert alert-success"><?= $_SESSION['success']; ?></div>
+        <?php unset($_SESSION['success']); ?>
+    <?php endif; ?>
+    
+    <?php if (isset($_SESSION['error'])): ?>
+        <div class="alert alert-danger"><?= $_SESSION['error']; ?></div>
+        <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
+    
     <a href="tambah.php" class="btn btn-primary mb-3">Tambah Transaksi</a>
 
     <a href="laporan.php" class="btn btn-danger mb-3">Download PDF</a>
