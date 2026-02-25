@@ -34,29 +34,29 @@ while($row = mysqli_fetch_assoc($data)){
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item mb-2">
             <a href="dashboard.php" class="nav-link text-white active">
-                📊 Dashboard
+                Dashboard
             </a>
         </li>
         <li class="nav-item mb-2">
             <a href="products/index.php" class="nav-link text-white">
-                📦 Data Produk
+                Data Produk
             </a>
         </li>
         <li class="nav-item mb-2">
             <a href="transactions/index.php" class="nav-link text-white">
-                💰 Transaksi
+                Transaksi
             </a>
         </li>
     </ul>
     <hr>
     <a href="logout.php" class="btn btn-danger w-100">
-        🚪 Logout
+        Logout
     </a>    
 </div>
 
 <div class="p-4 w-100">
     <h3>Dashboard</h3>
-    <p>Selamat datang <?= $_SESSION['username']; ?></p>
+    <p>Selamat datang, <?= $_SESSION['username']; ?></p>
 
     <!-- GRAFIK -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

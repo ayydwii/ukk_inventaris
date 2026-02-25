@@ -62,23 +62,23 @@ if (isset($_POST['simpan'])) {
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item mb-2">
             <a href="../dashboard.php" class="nav-link text-white">
-                📊 Dashboard
+                Dashboard
             </a>
         </li>
         <li class="nav-item mb-2">
             <a href="../products/index.php" class="nav-link text-white">
-                📦 Data Produk
+                Data Produk
             </a>
         </li>
         <li class="nav-item mb-2">
             <a href="index.php" class="nav-link text-white active">
-                💰 Transaksi
+                Transaksi
             </a>
         </li>
     </ul>
     <hr>
     <a href="../logout.php" class="btn btn-danger w-100">
-        🚪 Logout
+        Logout
     </a>    
 </div>
 

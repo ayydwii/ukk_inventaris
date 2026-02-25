@@ -25,28 +25,40 @@ $data = mysqli_query($conn, "SELECT * FROM products");
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item mb-2">
             <a href="../dashboard.php" class="nav-link text-white">
-                📊 Dashboard
+                Dashboard
             </a>
         </li>
         <li class="nav-item mb-2">
             <a href="index.php" class="nav-link text-white active">
-                📦 Data Produk
+                Data Produk
             </a>
         </li>
         <li class="nav-item mb-2">
             <a href="../transactions/index.php" class="nav-link text-white">
-                💰 Transaksi
+                Transaksi
             </a>
         </li>
     </ul>
     <hr>
     <a href="../logout.php" class="btn btn-danger w-100">
-        🚪 Logout
+        Logout
     </a>    
 </div>
 
 <div class="p-4 w-100">
     <h3>Data Produk</h3>
+    
+    <!-- Tampilkan Pesan Sukses/Error -->
+    <?php if (isset($_SESSION['success'])): ?>
+        <div class="alert alert-success"><?= $_SESSION['success']; ?></div>
+        <?php unset($_SESSION['success']); ?>
+    <?php endif; ?>
+    
+    <?php if (isset($_SESSION['error'])): ?>
+        <div class="alert alert-danger"><?= $_SESSION['error']; ?></div>
+        <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
+    
     <a href="tambah.php" class="btn btn-primary mb-3">Tambah Produk</a>
 
     <table class="table table-bordered">
@@ -68,7 +80,7 @@ $data = mysqli_query($conn, "SELECT * FROM products");
             <td><?= $row['price']; ?></td>
             <td>
                 <a href="edit.php?id=<?= $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                <a href="hapus.php?id=<?= $row['id']; ?>" class="btn btn-danger btn-sm">Hapus</a>
+                <a href="hapus.php?id=<?= $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')">Hapus</a>
             </td>
         </tr>
         <?php } ?>
