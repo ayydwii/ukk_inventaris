@@ -76,13 +76,14 @@ if (isset($_POST['simpan'])) {
 <head>
     <title>Edit Produk</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
 <div class="d-flex">
 
 <!-- SIDEBAR -->
 <div class="bg-dark text-white p-3 d-flex flex-column position-fixed" style="width:220px; min-height:100vh; top:0; left:0; z-index:1000;">   
-    <h4 class="text-center mb-4">Inventaris</h4>
+    <h5 class="text-center mb-4">Inventaris</h5>
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item mb-2">
             <a href="../dashboard.php" class="nav-link text-white">
@@ -101,13 +102,15 @@ if (isset($_POST['simpan'])) {
         </li>
     </ul>
     <hr>
-    <a href="../logout.php" class="btn btn-danger w-100">
+    <a href="../logout.php" class="btn btn-danger btn-sm w-100">
         Logout
     </a>    
 </div>
 
-<div class="p-4 w-100" style="margin-left:220px;">
-    <h3>Edit Produk</h3>
+<!-- MAIN CONTENT -->
+<div class="p-3 w-100" style="margin-left:220px;">
+    <h4 class="mb-1">Edit Produk</h4>
+    <p class="text-muted small mb-3">Edit data produk inventaris</p>
     
     <!-- Tampilkan Pesan Error -->
     <?php if (isset($_SESSION['error'])): ?>
@@ -115,30 +118,34 @@ if (isset($_POST['simpan'])) {
         <?php unset($_SESSION['error']); ?>
     <?php endif; ?>
 
-    <form method="POST">
-        <div class="mb-3">
-            <label>Kode</label>
-            <input type="text" name="code" class="form-control" value="<?= $produk['code']; ?>" required>
-        </div>
+    <div class="card shadow-sm" style="max-width: 500px;">
+        <div class="card-body">
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label">Kode</label>
+                    <input type="text" name="code" class="form-control form-control-sm" value="<?= $produk['code']; ?>" required>
+                </div>
 
-        <div class="mb-3">
-            <label>Nama</label>
-            <input type="text" name="name" class="form-control" value="<?= $produk['name']; ?>" required>
-        </div>
+                <div class="mb-3">
+                    <label class="form-label">Nama</label>
+                    <input type="text" name="name" class="form-control form-control-sm" value="<?= $produk['name']; ?>" required>
+                </div>
 
-        <div class="mb-3">
-            <label>Stock</label>
-            <input type="number" name="stock" class="form-control" value="<?= $produk['stock']; ?>" required min="0">
-        </div>
+                <div class="mb-3">
+                    <label class="form-label">Stock</label>
+                    <input type="number" name="stock" class="form-control form-control-sm" value="<?= $produk['stock']; ?>" required min="0">
+                </div>
 
-        <div class="mb-3">
-            <label>Harga</label>
-            <input type="number" step="0.01" name="price" class="form-control" value="<?= $produk['price']; ?>" required min="0">
-        </div>
+                <div class="mb-3">
+                    <label class="form-label">Harga</label>
+                    <input type="number" step="0.01" name="price" class="form-control form-control-sm" value="<?= $produk['price']; ?>" required min="0">
+                </div>
 
-        <button type="submit" name="simpan" class="btn btn-success">Simpan</button>
-        <a href="index.php" class="btn btn-secondary">Kembali</a>
-    </form>
+                <button type="submit" name="simpan" class="btn btn-success btn-sm">Simpan</button>
+                <a href="index.php" class="btn btn-secondary btn-sm">Kembali</a>
+            </form>
+        </div>
+    </div>
 </div>
 
 </div>

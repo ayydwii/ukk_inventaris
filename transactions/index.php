@@ -29,13 +29,14 @@ ORDER BY t.date DESC
 <head>
     <title>Data Transaksi</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
 <div class="d-flex">
 
 <!-- SIDEBAR -->
 <div class="bg-dark text-white p-3 d-flex flex-column position-fixed" style="width:220px; min-height:100vh; top:0; left:0; z-index:1000;">   
-    <h4 class="text-center mb-4">Inventaris</h4>
+    <h5 class="text-center mb-4">Inventaris</h5>
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item mb-2">
             <a href="../dashboard.php" class="nav-link text-white">
@@ -54,13 +55,15 @@ ORDER BY t.date DESC
         </li>
     </ul>
     <hr>
-    <a href="../logout.php" class="btn btn-danger w-100">
+    <a href="../logout.php" class="btn btn-danger btn-sm w-100">
         Logout
     </a>    
 </div>
 
-<div class="p-4 w-100" style="margin-left:220px;">
-    <h3>Data Transaksi</h3>
+<!-- MAIN CONTENT -->
+<div class="p-3 w-100" style="margin-left:220px;">
+    <h4 class="mb-1">Data Transaksi</h4>
+    <p class="text-muted small mb-3">Kelola data transaksi inventaris</p>
     
     <!-- Tampilkan Pesan Sukses/Error -->
     <?php if (isset($_SESSION['success'])): ?>
@@ -73,48 +76,57 @@ ORDER BY t.date DESC
         <?php unset($_SESSION['error']); ?>
     <?php endif; ?>
     
-    <!-- button tambah transaksi -->
-    <a href="tambah.php" class="btn btn-primary mb-3">Tambah Transaksi</a>
-    
-    <!-- button download pdf -->
-    <a href="laporan.php" class="btn btn-danger mb-3">Download PDF</a>
+    <!-- Action Buttons -->
+    <div class="mb-3">
+        <a href="tambah.php" class="btn btn-primary btn-sm">Tambah Transaksi</a>
+        <a href="laporan.php" class="btn btn-danger btn-sm">Download PDF</a>
+    </div>
 
-    <!-- filter tanggal transaksi -->
-    <form method="GET" class="row mb-3">
-        <div class="col-md-3">
-            <input type="date" name="dari" class="form-control">
+    <!-- Filter Tanggal -->
+    <form method="GET" class="row g-2 mb-3">
+        <div class="col-auto">
+            <input type="date" name="dari" class="form-control form-control-sm" placeholder="Dari">
         </div>
-
-        <div class="col-md-3">
-            <input type="date" name="sampai" class="form-control">
+        <div class="col-auto">
+            <input type="date" name="sampai" class="form-control form-control-sm" placeholder="Sampai">
         </div>
-
-        <div class="col-md-3">
-            <button type="submit" class="btn btn-primary">Filter</button>
-            <a href="index.php" class="btn btn-secondary">Reset</a>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+            <a href="index.php" class="btn btn-secondary btn-sm">Reset</a>
         </div>
     </form> 
 
-    <table class="table table-bordered">
-    <tr>
-        <th>No</th>
-        <th>Produk</th>
-        <th>Tipe</th>
-        <th>Jumlah</th>
-        <th>Tanggal</th>
-    </tr>
+    <!-- Tabel Transaksi -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <table class="table table-bordered table-hover mb-0">
+                <tr class="table-dark">
+                    <th class="text-center" style="width:50px;">No</th>
+                    <th>Produk</th>
+                    <th class="text-center">Tipe</th>
+                    <th class="text-center">Jumlah</th>
+                    <th>Tanggal</th>
+                </tr>
 
-    <?php $no=1; while($row=mysqli_fetch_assoc($data)){ ?>
-    <tr>
-        <td><?= $no++; ?></td>
-        <td><?= $row['name']; ?></td>
-        <td><?= $row['transaction_type']; ?></td>
-        <td><?= $row['total']; ?></td>
-        <td><?= $row['date']; ?></td>
-    </tr>
-    <?php } ?>
+                <?php $no=1; while($row=mysqli_fetch_assoc($data)){ ?>
+                <tr>
+                    <td class="text-center"><?= $no++; ?></td>
+                    <td><?= $row['name']; ?></td>
+                    <td class="text-center">
+                        <?php if($row['transaction_type'] == 'masuk'): ?>
+                            <span class="badge bg-success">Masuk</span>
+                        <?php else: ?>
+                            <span class="badge bg-danger">Keluar</span>
+                        <?php endif; ?>
+                    </td>
+                    <td class="text-center"><?= $row['total']; ?></td>
+                    <td><?= date('d-m-Y H:i', strtotime($row['date'])); ?></td>
+                </tr>
+                <?php } ?>
 
-    </table>
+            </table>
+        </div>
+    </div>
 </div>
 
 </div>

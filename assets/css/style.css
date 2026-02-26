@@ -1,13 +1,65 @@
+/* Sidebar Styles */
 .nav-link {
-    border-radius: 8px;
-    transition: 0.3s;
+  border-radius: 8px;
+  transition: 0.3s;
+  padding: 8px 12px;
+  font-size: 14px;
 }
 
 .nav-link:hover {
-    background-color: #0d6efd;
-    color: white !important;
+  background-color: #0d6efd;
+  color: white !important;
 }
 
 .active {
-    background-color: #0d6efd !important;
+  background-color: #0d6efd !important;
+}
+
+/* Table Styles */
+.table th,
+.table td {
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.table-dark {
+  background-color: #212529;
+}
+
+/* Card Styles */
+.card {
+  border-radius: 8px;
+}
+
+/* Form Styles */
+.form-label {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Button Sizes */
+.btn-sm {
+  font-size: 12px;
+  padding: 4px 10px;
+}
+
+/* Heading Sizes */
+h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+h5 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+h6 {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* Small text */
+.text-muted {
+  font-size: 12px;
 }

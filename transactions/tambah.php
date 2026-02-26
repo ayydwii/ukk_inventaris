@@ -60,13 +60,14 @@ if (isset($_POST['simpan'])) {
 <head>
     <title>Tambah Transaksi</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
 <div class="d-flex">
 
 <!-- SIDEBAR -->
 <div class="bg-dark text-white p-3 d-flex flex-column position-fixed" style="width:220px; min-height:100vh; top:0; left:0; z-index:1000;">   
-    <h4 class="text-center mb-4">Inventaris</h4>
+    <h5 class="text-center mb-4">Inventaris</h5>
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item mb-2">
             <a href="../dashboard.php" class="nav-link text-white">
@@ -85,45 +86,52 @@ if (isset($_POST['simpan'])) {
         </li>
     </ul>
     <hr>
-    <a href="../logout.php" class="btn btn-danger w-100">
+    <a href="../logout.php" class="btn btn-danger btn-sm w-100">
         Logout
     </a>    
 </div>
 
-<div class="p-4 w-100" style="margin-left:220px;">
-    <h3>Tambah Transaksi</h3>
-
+<!-- MAIN CONTENT -->
+<div class="p-3 w-100" style="margin-left:220px;">
+    <h4 class="mb-1">Tambah Transaksi</h4>
+    <p class="text-muted small mb-3">Tambah data transaksi inventaris</p>
+    
     <!-- Tampilkan Pesan Error/Sukses -->
     <?php if (isset($_SESSION['error'])): ?>
         <div class="alert alert-danger"><?= $_SESSION['error']; ?></div>
         <?php unset($_SESSION['error']); ?>
     <?php endif; ?>
 
-    <form method="POST">
-        <div class="mb-3">
-            <label>Produk</label>
-            <select name="product_id" class="form-control">
-                <?php while($p=mysqli_fetch_assoc($products)){ ?>
-                    <option value="<?= $p['id']; ?>"><?= $p['name']; ?> (Stok: <?= $p['stock']; ?>)</option>
-                <?php } ?>
-            </select>
-        </div>
+    <div class="card shadow-sm" style="max-width: 500px;">
+        <div class="card-body">
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label">Produk</label>
+                    <select name="product_id" class="form-control form-control-sm">
+                        <?php while($p=mysqli_fetch_assoc($products)){ ?>
+                            <option value="<?= $p['id']; ?>"><?= $p['name']; ?> (Stok: <?= $p['stock']; ?>)</option>
+                        <?php } ?>
+                    </select>
+                </div>
 
-        <div class="mb-3">
-            <label>Tipe</label>
-            <select name="transaction_type" class="form-control">
-                <option value="masuk">Masuk</option>
-                <option value="keluar">Keluar</option>
-            </select>
-        </div>
+                <div class="mb-3">
+                    <label class="form-label">Tipe</label>
+                    <select name="transaction_type" class="form-control form-control-sm">
+                        <option value="masuk">Masuk</option>
+                        <option value="keluar">Keluar</option>
+                    </select>
+                </div>
 
-        <div class="mb-3">
-            <label>Jumlah</label>
-            <input type="number" name="total" class="form-control" required min="1">
-        </div>
+                <div class="mb-3">
+                    <label class="form-label">Jumlah</label>
+                    <input type="number" name="total" class="form-control form-control-sm" required min="1">
+                </div>
 
-        <button type="submit" name="simpan" class="btn btn-success">Simpan</button>
-    </form>
+                <button type="submit" name="simpan" class="btn btn-success btn-sm">Simpan</button>
+                <a href="index.php" class="btn btn-secondary btn-sm">Kembali</a>
+            </form>
+        </div>
+    </div>
 </div>
 
 </div>
