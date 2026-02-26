@@ -7,10 +7,19 @@ if (!isset($_SESSION['username'])) {
     exit;
 }
 
+$where = "";
+
+if (isset($_GET['dari']) && isset($_GET['sampai']) && $_GET['dari'] != "" && $_GET['sampai'] != "") {
+    $dari = $_GET['dari'];
+    $sampai = $_GET['sampai'];
+    $where = "WHERE DATE(t.date) BETWEEN '$dari' AND '$sampai'";
+}
+
 $data = mysqli_query($conn, "
 SELECT t.*, p.name 
 FROM transactions t
 JOIN products p ON t.product_id = p.id
+$where
 ORDER BY t.date DESC
 ");
 ?>
@@ -25,7 +34,7 @@ ORDER BY t.date DESC
 <div class="d-flex">
 
 <!-- SIDEBAR -->
-<div class="bg-dark text-white p-3 d-flex flex-column" style="width:250px; min-height:100vh;">   
+<div class="bg-dark text-white p-3 d-flex flex-column position-fixed" style="width:220px; min-height:100vh; top:0; left:0; z-index:1000;">   
     <h4 class="text-center mb-4">Inventaris</h4>
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item mb-2">
@@ -50,7 +59,7 @@ ORDER BY t.date DESC
     </a>    
 </div>
 
-<div class="p-4 w-100">
+<div class="p-4 w-100" style="margin-left:220px;">
     <h3>Data Transaksi</h3>
     
     <!-- Tampilkan Pesan Sukses/Error -->
@@ -64,9 +73,27 @@ ORDER BY t.date DESC
         <?php unset($_SESSION['error']); ?>
     <?php endif; ?>
     
+    <!-- button tambah transaksi -->
     <a href="tambah.php" class="btn btn-primary mb-3">Tambah Transaksi</a>
-
+    
+    <!-- button download pdf -->
     <a href="laporan.php" class="btn btn-danger mb-3">Download PDF</a>
+
+    <!-- filter tanggal transaksi -->
+    <form method="GET" class="row mb-3">
+        <div class="col-md-3">
+            <input type="date" name="dari" class="form-control">
+        </div>
+
+        <div class="col-md-3">
+            <input type="date" name="sampai" class="form-control">
+        </div>
+
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a href="index.php" class="btn btn-secondary">Reset</a>
+        </div>
+    </form> 
 
     <table class="table table-bordered">
     <tr>

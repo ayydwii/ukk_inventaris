@@ -65,7 +65,7 @@ if (isset($_POST['simpan'])) {
 <div class="d-flex">
 
 <!-- SIDEBAR -->
-<div class="bg-dark text-white p-3 d-flex flex-column" style="width:250px; min-height:100vh;">   
+<div class="bg-dark text-white p-3 d-flex flex-column position-fixed" style="width:220px; min-height:100vh; top:0; left:0; z-index:1000;">   
     <h4 class="text-center mb-4">Inventaris</h4>
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item mb-2">
@@ -90,7 +90,7 @@ if (isset($_POST['simpan'])) {
     </a>    
 </div>
 
-<div class="p-4 w-100">
+<div class="p-4 w-100" style="margin-left:220px;">
     <h3>Tambah Transaksi</h3>
 
     <!-- Tampilkan Pesan Error/Sukses -->
