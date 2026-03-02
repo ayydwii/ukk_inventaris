@@ -83,7 +83,7 @@ if (isset($_POST['simpan'])) {
 
 <!-- SIDEBAR -->
 <div class="bg-dark text-white p-3 d-flex flex-column position-fixed" style="width:220px; min-height:100vh; top:0; left:0; z-index:1000;">   
-    <h5 class="text-center mb-4">Inventaris</h5>
+    <h5 class="text-center mb-4">Inventaris Gudang</h5>
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item mb-2">
             <a href="../dashboard.php" class="nav-link text-white">
