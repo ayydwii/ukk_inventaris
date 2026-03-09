@@ -50,26 +50,26 @@ $keluar = mysqli_fetch_assoc($q_keluar)['total'] ?? 0;
 <div class="d-flex">
 
 <!-- SIDEBAR -->
-<div class="bg-dark text-white p-3 d-flex flex-column position-fixed" style="width:220px; min-height:100vh; top:0; left:0; z-index:1000;">
-    <h5 class="text-center mb-4">Inventaris Gudang</h5>
+<div class="text-dark p-3 d-flex flex-column position-fixed sidebar" style="width:220px; min-height:100vh; top:0; left:0; z-index:1000; background: #ffffff;">
+    <h5 class="text-center mb-4" style="color: #528CF6;">Inventaris Gudang</h5>
     <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item mb-2">
-            <a href="dashboard.php" class="nav-link text-white active">
+        <li class="nav-item mb-1">
+            <a href="dashboard.php" class="nav-link text-dark active">
                 Dashboard
             </a>
         </li>
-        <li class="nav-item mb-2">
-            <a href="products/index.php" class="nav-link text-white">
+        <li class="nav-item mb-1">
+            <a href="products/index.php" class="nav-link text-dark">
                 Data Produk
             </a>
         </li>
-        <li class="nav-item mb-2">
-            <a href="transactions/index.php" class="nav-link text-white">
+        <li class="nav-item mb-1">
+            <a href="transactions/index.php" class="nav-link text-dark">
                 Transaksi
             </a>
         </li>
     </ul>
-    <hr>
+    <hr style="border-color: #D6DCEC;">
     <a href="logout.php" class="btn btn-danger btn-sm w-100">
         Logout
     </a>    
@@ -83,28 +83,28 @@ $keluar = mysqli_fetch_assoc($q_keluar)['total'] ?? 0;
     <!-- Cards Row - Smaller -->
     <div class="row g-3 mb-3">
         <div class="col-4">
-            <div class="card border-primary shadow-sm">
+            <div class="card stat-card stat-card-primary shadow-sm">
                 <div class="card-body py-2 px-3 text-center">
-                    <h6 class="text-primary text-uppercase small mb-1">Total Produk</h6>
-                    <h3 class="text-primary fw-bold mb-0"><?= $total_produk; ?></h3>
+                    <h6 class="text-white-50 text-uppercase small mb-1" style="opacity: 0.8;">Total Produk</h6>
+                    <h3 class="text-white fw-bold mb-0"><?= $total_produk; ?></h3>
                 </div>
             </div>
         </div>
 
         <div class="col-4">
-            <div class="card border-success shadow-sm">
+            <div class="card stat-card stat-card-success shadow-sm">
                 <div class="card-body py-2 px-3 text-center">
-                    <h6 class="text-success text-uppercase small mb-1">Transaksi</h6>
-                    <h3 class="text-success fw-bold mb-0"><?= $total_transaksi; ?></h3>
+                    <h6 class="text-white-50 text-uppercase small mb-1" style="opacity: 0.8;">Transaksi</h6>
+                    <h3 class="text-white fw-bold mb-0"><?= $total_transaksi; ?></h3>
                 </div>
             </div>
         </div>
 
         <div class="col-4">
-            <div class="card border-warning shadow-sm">
+            <div class="card stat-card stat-card-warning shadow-sm">
                 <div class="card-body py-2 px-3 text-center">
-                    <h6 class="text-warning text-uppercase small mb-1">Total Stok</h6>
-                    <h3 class="text-warning fw-bold mb-0"><?= $total_stock ?? 0; ?></h3>
+                    <h6 class="text-white-50 text-uppercase small mb-1" style="opacity: 0.8;">Total Stok</h6>
+                    <h3 class="text-white fw-bold mb-0"><?= $total_stock ?? 0; ?></h3>
                 </div>
             </div>
         </div>
@@ -113,7 +113,7 @@ $keluar = mysqli_fetch_assoc($q_keluar)['total'] ?? 0;
     <!-- Grafik Stok Produk -->
     <div class="card shadow-sm mb-3">
         <div class="card-body">
-            <h6 class="card-title mb-3">Grafik Stok Produk</h6>
+            <h6 class="card-title mb-3" style="color: #528CF6;">Grafik Stok Produk</h6>
             <div style="height: 200px;">
                 <canvas id="stockChart"></canvas>
             </div>
@@ -123,7 +123,7 @@ $keluar = mysqli_fetch_assoc($q_keluar)['total'] ?? 0;
     <!-- Grafik Transaksi Masuk vs Keluar -->
     <div class="card shadow-sm">
         <div class="card-body">
-            <h6 class="card-title mb-3">Grafik Transaksi Masuk vs Keluar</h6>
+            <h6 class="card-title mb-3" style="color: #528CF6;">Grafik Transaksi Masuk vs Keluar</h6>
             <div style="height: 200px;">
                 <canvas id="transaksiChart"></canvas>
             </div>
@@ -143,8 +143,8 @@ new Chart(ctx, {
         datasets: [{
             label: 'Stock',
             data: <?= json_encode($stocks); ?>,
-            backgroundColor: 'rgba(54, 162, 235, 0.7)',
-            borderColor: 'rgba(54, 162, 235, 1)',
+            backgroundColor: 'rgba(82, 140, 246, 0.7)',
+            borderColor: 'rgba(82, 140, 246, 1)',
             borderWidth: 1
         }]
     },
@@ -175,12 +175,12 @@ new Chart(ctx2, {
             label: 'Jumlah',
             data: [<?= $masuk; ?>, <?= $keluar; ?>],
             backgroundColor: [
-                'rgba(40, 167, 69, 0.7)',
-                'rgba(220, 53, 69, 0.7)'
+                'rgba(82, 140, 246, 0.7)',
+                'rgba(107, 156, 247, 0.7)'
             ],
             borderColor: [
-                'rgba(40, 167, 69, 1)',
-                'rgba(220, 53, 69, 1)'
+                'rgba(82, 140, 246, 1)',
+                'rgba(107, 156, 247, 1)'
             ],
             borderWidth: 1
         }]

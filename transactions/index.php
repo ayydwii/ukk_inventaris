@@ -35,26 +35,26 @@ ORDER BY t.date DESC
 <div class="d-flex">
 
 <!-- SIDEBAR -->
-<div class="bg-dark text-white p-3 d-flex flex-column position-fixed" style="width:220px; min-height:100vh; top:0; left:0; z-index:1000;">   
-    <h5 class="text-center mb-4">Inventaris Gudang</h5>
+<div class="text-dark p-3 d-flex flex-column position-fixed sidebar" style="width:220px; min-height:100vh; top:0; left:0; z-index:1000; background: #ffffff;">
+    <h5 class="text-center mb-4" style="color: #528CF6;">Inventaris Gudang</h5>
     <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item mb-2">
-            <a href="../dashboard.php" class="nav-link text-white">
+        <li class="nav-item mb-1">
+            <a href="../dashboard.php" class="nav-link text-dark">
                 Dashboard
             </a>
         </li>
-        <li class="nav-item mb-2">
-            <a href="../products/index.php" class="nav-link text-white">
+        <li class="nav-item mb-1">
+            <a href="../products/index.php" class="nav-link text-dark">
                 Data Produk
             </a>
         </li>
-        <li class="nav-item mb-2">
-            <a href="index.php" class="nav-link text-white active">
+        <li class="nav-item mb-1">
+            <a href="index.php" class="nav-link text-dark active">
                 Transaksi
             </a>
         </li>
     </ul>
-    <hr>
+    <hr style="border-color: #D6DCEC;">
     <a href="../logout.php" class="btn btn-danger btn-sm w-100">
         Logout
     </a>    
@@ -100,12 +100,12 @@ ORDER BY t.date DESC
     <div class="card shadow-sm">
         <div class="card-body p-0">
             <table class="table table-bordered table-hover mb-0">
-                <tr class="table-dark">
-                    <th class="text-center" style="width:50px;">No</th>
-                    <th>Produk</th>
-                    <th class="text-center">Tipe</th>
-                    <th class="text-center">Jumlah</th>
-                    <th>Tanggal</th>
+                <tr style="background: #E8F1FD;">
+                    <th class="text-center" style="width:50px; color: #528CF6;">No</th>
+                    <th style="color: #528CF6;">Produk</th>
+                    <th class="text-center" style="color: #528CF6;">Tipe</th>
+                    <th class="text-center" style="color: #528CF6;">Jumlah</th>
+                    <th style="color: #528CF6;">Tanggal</th>
                 </tr>
 
                 <?php $no=1; while($row=mysqli_fetch_assoc($data)){ ?>
@@ -114,9 +114,9 @@ ORDER BY t.date DESC
                     <td><?= $row['name']; ?></td>
                     <td class="text-center">
                         <?php if($row['transaction_type'] == 'masuk'): ?>
-                            <span class="badge bg-success">Masuk</span>
+                            <span class="badge">Masuk</span>
                         <?php else: ?>
-                            <span class="badge bg-danger">Keluar</span>
+                            <span class="badge">Keluar</span>
                         <?php endif; ?>
                     </td>
                     <td class="text-center"><?= $row['total']; ?></td>

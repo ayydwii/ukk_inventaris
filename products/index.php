@@ -21,26 +21,26 @@ $data = mysqli_query($conn, "SELECT * FROM products");
 <div class="d-flex">
 
 <!-- SIDEBAR -->
-<div class="bg-dark text-white p-3 d-flex flex-column position-fixed" style="width:220px; min-height:100vh; top:0; left:0; z-index:1000;">   
-    <h5 class="text-center mb-4">Inventaris Gudang</h5>
+<div class="text-dark p-3 d-flex flex-column position-fixed sidebar" style="width:220px; min-height:100vh; top:0; left:0; z-index:1000; background: #ffffff;">
+    <h5 class="text-center mb-4" style="color: #528CF6;">Inventaris Gudang</h5>
     <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item mb-2">
-            <a href="../dashboard.php" class="nav-link text-white">
+        <li class="nav-item mb-1">
+            <a href="../dashboard.php" class="nav-link text-dark">
                 Dashboard
             </a>
         </li>
-        <li class="nav-item mb-2">
-            <a href="index.php" class="nav-link text-white active">
+        <li class="nav-item mb-1">
+            <a href="index.php" class="nav-link text-dark active">
                 Data Produk
             </a>
         </li>
-        <li class="nav-item mb-2">
-            <a href="../transactions/index.php" class="nav-link text-white">
+        <li class="nav-item mb-1">
+            <a href="../transactions/index.php" class="nav-link text-dark">
                 Transaksi
             </a>
         </li>
     </ul>
-    <hr>
+    <hr style="border-color: #D6DCEC;">
     <a href="../logout.php" class="btn btn-danger btn-sm w-100">
         Logout
     </a>    
@@ -67,13 +67,13 @@ $data = mysqli_query($conn, "SELECT * FROM products");
     <div class="card shadow-sm">
         <div class="card-body p-0">
             <table class="table table-bordered table-hover mb-0">
-                <tr class="table-dark">
-                    <th class="text-center" style="width:50px;">No</th>
-                    <th>Kode</th>
-                    <th>Nama</th>
-                    <th class="text-center">Stock</th>
-                    <th>Harga</th>
-                    <th class="text-center" style="width:150px;">Aksi</th>
+                <tr style="background: #E8F1FD;">
+                    <th class="text-center" style="width:50px; color: #528CF6;">No</th>
+                    <th style="color: #528CF6;">Kode</th>
+                    <th style="color: #528CF6;">Nama</th>
+                    <th class="text-center" style="color: #528CF6;">Stock</th>
+                    <th style="color: #528CF6;">Harga</th>
+                    <th class="text-center" style="width:150px; color: #528CF6;">Aksi</th>
                 </tr>
 
                 <?php $no=1; while($row = mysqli_fetch_assoc($data)) { ?>

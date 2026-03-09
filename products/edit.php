@@ -82,26 +82,26 @@ if (isset($_POST['simpan'])) {
 <div class="d-flex">
 
 <!-- SIDEBAR -->
-<div class="bg-dark text-white p-3 d-flex flex-column position-fixed" style="width:220px; min-height:100vh; top:0; left:0; z-index:1000;">   
-    <h5 class="text-center mb-4">Inventaris Gudang</h5>
+<div class="text-dark p-3 d-flex flex-column position-fixed sidebar" style="width:220px; min-height:100vh; top:0; left:0; z-index:1000; background: #ffffff;">
+    <h5 class="text-center mb-4" style="color: #528CF6;">Inventaris Gudang</h5>
     <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item mb-2">
-            <a href="../dashboard.php" class="nav-link text-white">
+        <li class="nav-item mb-1">
+            <a href="../dashboard.php" class="nav-link text-dark">
                 Dashboard
             </a>
         </li>
-        <li class="nav-item mb-2">
-            <a href="index.php" class="nav-link text-white active">
+        <li class="nav-item mb-1">
+            <a href="index.php" class="nav-link text-dark active">
                 Data Produk
             </a>
         </li>
-        <li class="nav-item mb-2">
-            <a href="../transactions/index.php" class="nav-link text-white">
+        <li class="nav-item mb-1">
+            <a href="../transactions/index.php" class="nav-link text-dark">
                 Transaksi
             </a>
         </li>
     </ul>
-    <hr>
+    <hr style="border-color: #D6DCEC;">
     <a href="../logout.php" class="btn btn-danger btn-sm w-100">
         Logout
     </a>    

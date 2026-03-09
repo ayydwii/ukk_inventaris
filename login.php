@@ -12,11 +12,11 @@ if (isset($_SESSION['login'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body class="bg-light d-flex justify-content-center align-items-center vh-100">
+<body class="d-flex justify-content-center align-items-center vh-100" style="background: #f8FAFC;">
 
-<div class="card shadow-sm" style="width: 350px;">
+<div class="card shadow-sm" style="width: 350px; border: 1px solid #D6DCEC;">
     <div class="card-body p-4">
-        <h5 class="text-center mb-4">Login Admin</h5>
+        <h5 class="text-center mb-4" style="color: #528CF6;">Login Admin</h5>
         
         <?php if (isset($_SESSION['error'])): ?>
             <div class="alert alert-danger"><?= $_SESSION['error']; ?></div>
