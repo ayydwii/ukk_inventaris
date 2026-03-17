@@ -44,93 +44,98 @@ $keluar = mysqli_fetch_assoc($q_keluar)['total'] ?? 0;
     <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-<div class="d-flex">
+<!-- <div class="d-flex"> -->
 
 <!-- SIDEBAR -->
-<div class="text-dark p-3 d-flex flex-column position-fixed sidebar" style="width:220px; min-height:100vh; top:0; left:0; z-index:1000; background: #ffffff;">
-    <h5 class="text-center mb-4" style="color: #528CF6;">Inventaris Gudang</h5>
-    <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item mb-1">
-            <a href="dashboard.php" class="nav-link text-dark active">
+<div class="sidebar">
+    <h5 class="logo">Inventaris Gudang</h5>
+    <ul class="menu">
+        <li>
+            <a href="dashboard.php" class="menu-item active">
+                <i class="bi bi-grid-1x2"></i>
                 Dashboard
             </a>
         </li>
-        <li class="nav-item mb-1">
-            <a href="products/index.php" class="nav-link text-dark">
+        <li>
+            <a href="products/index.php" class="menu-item">
+                <i class="bi bi-box-seam"></i>
                 Data Produk
             </a>
         </li>
-        <li class="nav-item mb-1">
-            <a href="transactions/index.php" class="nav-link text-dark">
+        <li>
+            <a href="transactions/index.php" class="menu-item">
+                <i class="bi bi-arrow-left-right"></i>
                 Transaksi
             </a>
         </li>
     </ul>
-    <hr style="border-color: #D6DCEC;">
-    <a href="logout.php" class="btn btn-danger btn-sm w-100">
-        Logout
-    </a>    
+
+    <div class="logout-area">
+        <a href="logout.php" class="logout-btn">
+            <i class="bi bi-box-arrow-left"></i> Logout
+        </a>
+    </div>
 </div>
 
 <!-- MAIN CONTENT -->
-<div class="p-3 w-100" style="margin-left:220px;">
-    <h4 class="mb-1">Dashboard</h4>
-    <p class="text-muted small mb-3">Selamat datang, <strong><?= $_SESSION['username']; ?></strong></p>
+    <div class="main-content">
+        <h4 class="mb-1">Dashboard</h4>
+        <p class="text-muted small mb-4">Selamat datang, <strong><?= $_SESSION['username']; ?></strong></p>
 
-    <!-- Cards Row - Smaller -->
-    <div class="row g-3 mb-3">
-        <div class="col-4">
-            <div class="card stat-card stat-card-primary shadow-sm">
-                <div class="card-body py-2 px-3 text-center">
-                    <h6 class="text-white-50 text-uppercase small mb-1" style="opacity: 0.8;">Total Produk</h6>
-                    <h3 class="text-white fw-bold mb-0"><?= $total_produk; ?></h3>
+        <!-- Cards Row -->
+        <div class="row g-3 mb-4">
+            <div class="col-4">
+                <div class="card stat-card stat-card-primary">
+                    <div class="text-center">
+                        <h6 class="text-uppercase small mb-1">Total Produk</h6>
+                        <h3 class="fw-bold mb-0"><?= $total_produk; ?></h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="card stat-card stat-card-success">
+                    <div class="text-center">
+                        <h6 class="text-uppercase small mb-1">Transaksi</h6>
+                        <h3 class="fw-bold mb-0"><?= $total_transaksi; ?></h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="card stat-card stat-card-warning">
+                    <div class="text-center">
+                        <h6 class="text-uppercase small mb-1">Total Stok</h6>
+                        <h3 class="fw-bold mb-0"><?= $total_stock ?? 0; ?></h3>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-4">
-            <div class="card stat-card stat-card-success shadow-sm">
-                <div class="card-body py-2 px-3 text-center">
-                    <h6 class="text-white-50 text-uppercase small mb-1" style="opacity: 0.8;">Transaksi</h6>
-                    <h3 class="text-white fw-bold mb-0"><?= $total_transaksi; ?></h3>
+        <!-- Grafik Stok Produk -->
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title">Grafik Stok Produk</h6>
+                <div style="height: 250px;">
+                    <canvas id="stockChart"></canvas>
                 </div>
             </div>
         </div>
 
-        <div class="col-4">
-            <div class="card stat-card stat-card-warning shadow-sm">
-                <div class="card-body py-2 px-3 text-center">
-                    <h6 class="text-white-50 text-uppercase small mb-1" style="opacity: 0.8;">Total Stok</h6>
-                    <h3 class="text-white fw-bold mb-0"><?= $total_stock ?? 0; ?></h3>
+        <!-- Grafik Transaksi Masuk vs Keluar -->
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title">Grafik Transaksi Masuk vs Keluar</h6>
+                <div style="height: 250px;">
+                    <canvas id="transaksiChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Grafik Stok Produk -->
-    <div class="card shadow-sm mb-3">
-        <div class="card-body">
-            <h6 class="card-title mb-3" style="color: #528CF6;">Grafik Stok Produk</h6>
-            <div style="height: 200px;">
-                <canvas id="stockChart"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <!-- Grafik Transaksi Masuk vs Keluar -->
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <h6 class="card-title mb-3" style="color: #528CF6;">Grafik Transaksi Masuk vs Keluar</h6>
-            <div style="height: 200px;">
-                <canvas id="transaksiChart"></canvas>
-            </div>
-        </div>
-    </div>
-
-</div>
 
 </div>
 
@@ -143,9 +148,10 @@ new Chart(ctx, {
         datasets: [{
             label: 'Stock',
             data: <?= json_encode($stocks); ?>,
-            backgroundColor: 'rgba(82, 140, 246, 0.7)',
-            borderColor: 'rgba(82, 140, 246, 1)',
-            borderWidth: 1
+            backgroundColor: 'rgba(59, 130, 246, 0.7)',
+            borderColor: 'rgba(59, 130, 246, 1)',
+            borderWidth: 1,
+            borderRadius: 6
         }]
     },
     options: {
@@ -157,10 +163,12 @@ new Chart(ctx, {
         scales: {
             y: {
                 beginAtZero: true,
-                ticks: { font: { size: 10 } }
+                ticks: { font: { size: 11 } },
+                grid: { color: 'rgba(0,0,0,0.05)' }
             },
             x: {
-                ticks: { font: { size: 10 } }
+                ticks: { font: { size: 11 } },
+                grid: { display: false }
             }
         }
     }
@@ -175,14 +183,15 @@ new Chart(ctx2, {
             label: 'Jumlah',
             data: [<?= $masuk; ?>, <?= $keluar; ?>],
             backgroundColor: [
-                'rgba(82, 140, 246, 0.7)',
-                'rgba(107, 156, 247, 0.7)'
+                'rgba(16, 185, 129, 0.7)',
+                'rgba(239, 68, 68, 0.7)'
             ],
             borderColor: [
-                'rgba(82, 140, 246, 1)',
-                'rgba(107, 156, 247, 1)'
+                'rgba(16, 185, 129, 1)',
+                'rgba(239, 68, 68, 1)'
             ],
-            borderWidth: 1
+            borderWidth: 1,
+            borderRadius: 6
         }]
     },
     options: {
@@ -194,10 +203,12 @@ new Chart(ctx2, {
         scales: {
             y: {
                 beginAtZero: true,
-                ticks: { font: { size: 10 } }
+                ticks: { font: { size: 11 } },
+                grid: { color: 'rgba(0,0,0,0.05)' }
             },
             x: {
-                ticks: { font: { size: 10 } }
+                ticks: { font: { size: 11 } },
+                grid: { display: false }
             }
         }
     }
@@ -205,3 +216,4 @@ new Chart(ctx2, {
 </script>
 </body>
 </html>
+
