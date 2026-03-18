@@ -104,16 +104,18 @@ if (isset($_POST['simpan'])) {
                 <form method="POST">
                     <div class="mb-3">
                         <label class="form-label">Produk</label>
-                        <select name="product_id" class="form-control">
+                        <select name="product_id" class="form-control" required>
+                            <option value="">Pilih Produk</option>
                             <?php while($p=mysqli_fetch_assoc($products)){ ?>
-                                <option value="<?= $p['id']; ?>"><?= $p['name']; ?> (Stok: <?= $p['stock']; ?>)</option>
+                                <option value="<?= $p['id']; ?>" data-stock="<?= $p['stock']; ?>"><?= $p['name']; ?> (Stok: <?= $p['stock']; ?>)</option>
                             <?php } ?>
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Tipe</label>
-                        <select name="transaction_type" class="form-control">
+                        <select name="transaction_type" class="form-control" required>
+                            <option value="">Pilih Tipe</option>
                             <option value="masuk">Masuk</option>
                             <option value="keluar">Keluar</option>
                         </select>
@@ -121,7 +123,8 @@ if (isset($_POST['simpan'])) {
 
                     <div class="mb-3">
                         <label class="form-label">Jumlah</label>
-                        <input type="number" name="total" class="form-control" required min="1">
+                        <input type="number" name="total" class="form-control" required min="1" id="total">
+                        <div id="stock-warning" class="text-danger mt-1" style="display:none;"></div>
                     </div>
 
                     <button type="submit" name="simpan" class="btn btn-success">
@@ -133,7 +136,61 @@ if (isset($_POST['simpan'])) {
         </div>
     </div>
 
+
+    </script>
+
 </div>
 </body>
+</html>
+
+<script>
+let currentStock = 0;
+
+document.addEventListener('DOMContentLoaded', function() {
+    const productSelect = document.querySelector('select[name="product_id"]');
+    const typeSelect = document.querySelector('select[name="transaction_type"]');
+    const totalInput = document.querySelector('#total');
+    const submitBtn = document.querySelector('button[name="simpan"]');
+    const warningDiv = document.querySelector('#stock-warning');
+
+    function validateForm() {
+        const productId = productSelect.value;
+        const type = typeSelect.value;
+        const total = parseInt(totalInput.value);
+
+        if (!productId || !type || !total || total <= 0) {
+            submitBtn.disabled = true;
+            return;
+        }
+
+        if (type === 'keluar' && total > currentStock) {
+            warningDiv.textContent = `Stock hanya ${currentStock}, tidak boleh keluar lebih dari stock!`;
+            warningDiv.style.display = 'block';
+            submitBtn.disabled = true;
+        } else {
+            warningDiv.style.display = 'none';
+            submitBtn.disabled = false;
+        }
+    }
+
+    productSelect.addEventListener('change', function() {
+        currentStock = parseInt(this.options[this.selectedIndex].dataset.stock) || 0;
+        validateForm();
+    });
+
+    typeSelect.addEventListener('change', validateForm);
+    totalInput.addEventListener('input', validateForm);
+
+    // Initial validation
+    validateForm();
+});
+
+document.querySelector('form').addEventListener('submit', function(e) {
+    if (submitBtn.disabled) {
+        e.preventDefault();
+        alert('Form tidak valid! Periksa input.');
+    }
+});
+</script>
 </html>
 

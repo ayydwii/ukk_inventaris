@@ -152,6 +152,31 @@ if (isset($_POST['simpan'])) {
     </div>
 
 </div>
-</body>
+
+    <script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const code = document.querySelector('input[name="code"]').value.trim();
+        const name = document.querySelector('input[name="name"]').value.trim();
+        const stock = parseInt(document.querySelector('input[name="stock"]').value);
+        const price = parseFloat(document.querySelector('input[name="price"]').value);
+        
+        if (!code || !name) {
+            e.preventDefault();
+            alert('Kode dan Nama tidak boleh kosong!');
+            return;
+        }
+        if (isNaN(stock) || stock < 0) {
+            e.preventDefault();
+            alert('Stock harus angka >= 0!');
+            return;
+        }
+        if (isNaN(price) || price < 0) {
+            e.preventDefault();
+            alert('Harga harus angka >= 0!');
+            return;
+        }
+    });
+    </script>
+
 </html>
 
