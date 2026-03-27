@@ -7,40 +7,59 @@ if (!isset($_SESSION['username'])) {
     exit;
 }
 
-$products = mysqli_query($conn, "SELECT * FROM products");
+// Ambil hanya produk aktif
+$products = mysqli_query($conn, "SELECT * FROM products WHERE status='aktif'");
 
 if (isset($_POST['simpan'])) {
-    $product_id = (int)$_POST['product_id'];
+    $product_id = isset($_POST['product_id']) ? (int)$_POST['product_id'] : 0;
     $type = $_POST['transaction_type'];
     $total = (int)$_POST['total'];
     $date = date('Y-m-d H:i:s');
 
+    // VALIDASI
     if ($product_id <= 0) {
-        $_SESSION['error'] = "Produk tidak valid";
+        $_SESSION['error'] = "Silakan pilih produk terlebih dahulu!";
+    } elseif (!in_array($type, ['masuk','keluar'])) {
+        $_SESSION['error'] = "Tipe transaksi tidak valid!";
     } elseif ($total <= 0) {
         $_SESSION['error'] = "Jumlah harus lebih dari 0";
     } else {
-        $cek = mysqli_query($conn, "SELECT stock FROM products WHERE id = $product_id");
+
+        // Cek produk aktif
+        $cek = mysqli_query($conn, "SELECT stock FROM products WHERE id = $product_id AND status='aktif'");
+
         if (mysqli_num_rows($cek) == 0) {
-            $_SESSION['error'] = "Produk tidak ditemukan";
+            $_SESSION['error'] = "Produk tidak ditemukan atau sudah nonaktif!";
         } else {
             $dataStock = mysqli_fetch_assoc($cek);
             $stok_sekarang = $dataStock['stock'];
 
+            // Cegah stok minus
             if ($type == 'keluar' && $total > $stok_sekarang) {
                 $_SESSION['error'] = "Stock tidak mencukupi! Stok tersedia: $stok_sekarang";
             } else {
-                mysqli_query($conn, "INSERT INTO transactions (product_id,user_id,transaction_type,total,date) VALUES ('$product_id','1','$type','$total','$date')");
 
-                if ($type == 'masuk') {
-                    mysqli_query($conn, "UPDATE products SET stock = stock + $total WHERE id = $product_id");
+                // Simpan transaksi
+                $insert = mysqli_query($conn, "INSERT INTO transactions 
+                    (product_id,user_id,transaction_type,total,date) 
+                    VALUES ('$product_id','1','$type','$total','$date')");
+
+                if ($insert) {
+
+                    // Update stok (HANYA SEKALI!)
+                    if ($type == 'masuk') {
+                        mysqli_query($conn, "UPDATE products SET stock = stock + $total WHERE id = $product_id");
+                    } else {
+                        mysqli_query($conn, "UPDATE products SET stock = stock - $total WHERE id = $product_id");
+                    }
+
+                    $_SESSION['success'] = "Transaksi berhasil disimpan";
+                    header("Location: index.php");
+                    exit;
+
                 } else {
-                    mysqli_query($conn, "UPDATE products SET stock = stock - $total WHERE id = $product_id");
+                    $_SESSION['error'] = "Gagal menyimpan transaksi!";
                 }
-
-                $_SESSION['success'] = "Transaksi berhasil disimpan";
-                header("Location: index.php");
-                exit;
             }
         }
     }
@@ -56,7 +75,6 @@ if (isset($_POST['simpan'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </head>
 <body>
-<!-- <div class="d-flex"> -->
 
 <!-- SIDEBAR -->
 <div class="sidebar">
@@ -64,20 +82,17 @@ if (isset($_POST['simpan'])) {
     <ul class="menu">
         <li>
             <a href="../dashboard.php" class="menu-item">
-                <i class="bi bi-grid-1x2"></i>
-                Dashboard
+                <i class="bi bi-grid-1x2"></i> Dashboard
             </a>
         </li>
         <li>
             <a href="../products/index.php" class="menu-item">
-                <i class="bi bi-box-seam"></i>
-                Data Produk
+                <i class="bi bi-box-seam"></i> Data Produk
             </a>
         </li>
         <li>
             <a href="index.php" class="menu-item active">
-                <i class="bi bi-arrow-left-right"></i>
-                Transaksi
+                <i class="bi bi-arrow-left-right"></i> Transaksi
             </a>
         </li>
     </ul>
@@ -90,107 +105,64 @@ if (isset($_POST['simpan'])) {
 </div>
 
 <!-- MAIN CONTENT -->
-    <div class="main-content">
-        <h4 class="mb-1">Tambah Transaksi</h4>
-        <p class="text-muted small mb-4">Tambah data transaksi inventaris</p>
-        
-        <?php if (isset($_SESSION['error'])): ?>
-            <div class="alert alert-danger"><?= $_SESSION['error']; ?></div>
-            <?php unset($_SESSION['error']); ?>
-        <?php endif; ?>
+<div class="main-content">
+    <h4 class="mb-1">Tambah Transaksi</h4>
+    <p class="text-muted small mb-4">Tambah data transaksi inventaris</p>
+    
+    <!-- ERROR -->
+    <?php if (isset($_SESSION['error'])): ?>
+        <div class="alert alert-danger"><?= $_SESSION['error']; ?></div>
+        <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
 
-        <div class="card" style="max-width: 500px;">
-            <div class="card-body">
-                <form method="POST">
-                    <div class="mb-3">
-                        <label class="form-label">Produk</label>
-                        <select name="product_id" class="form-control" required>
-                            <option value="">Pilih Produk</option>
-                            <?php while($p=mysqli_fetch_assoc($products)){ ?>
-                                <option value="<?= $p['id']; ?>" data-stock="<?= $p['stock']; ?>"><?= $p['name']; ?> (Stok: <?= $p['stock']; ?>)</option>
-                            <?php } ?>
-                        </select>
-                    </div>
+    <!-- SUCCESS -->
+    <?php if (isset($_SESSION['success'])): ?>
+        <div class="alert alert-success"><?= $_SESSION['success']; ?></div>
+        <?php unset($_SESSION['success']); ?>
+    <?php endif; ?>
 
-                    <div class="mb-3">
-                        <label class="form-label">Tipe</label>
-                        <select name="transaction_type" class="form-control" required>
-                            <option value="">Pilih Tipe</option>
-                            <option value="masuk">Masuk</option>
-                            <option value="keluar">Keluar</option>
-                        </select>
-                    </div>
+    <div class="card" style="max-width: 500px;">
+        <div class="card-body">
+            <form method="POST">
 
-                    <div class="mb-3">
-                        <label class="form-label">Jumlah</label>
-                        <input type="number" name="total" class="form-control" required min="1" id="total">
-                        <div id="stock-warning" class="text-danger mt-1" style="display:none;"></div>
-                    </div>
+                <!-- PRODUK -->
+                <div class="mb-3">
+                    <label class="form-label">Produk</label>
+                    <select name="product_id" class="form-control" required>
+                        <option value="">-- Pilih Produk --</option>
+                        <?php while($p=mysqli_fetch_assoc($products)){ ?>
+                            <option value="<?= $p['id']; ?>">
+                                <?= $p['name']; ?> (Stok: <?= $p['stock']; ?>)
+                            </option>
+                        <?php } ?>
+                    </select>
+                </div>
 
-                    <button type="submit" name="simpan" class="btn btn-success">
-                        <i class="bi bi-check-circle"></i> Simpan
-                    </button>
-                    <a href="index.php" class="btn btn-secondary">Kembali</a>
-                </form>
-            </div>
+                <!-- TIPE -->
+                <div class="mb-3">
+                    <label class="form-label">Tipe</label>
+                    <select name="transaction_type" class="form-control" required>
+                        <option value="masuk">Masuk</option>
+                        <option value="keluar">Keluar</option>
+                    </select>
+                </div>
+
+                <!-- JUMLAH -->
+                <div class="mb-3">
+                    <label class="form-label">Jumlah</label>
+                    <input type="number" name="total" class="form-control" required min="1">
+                </div>
+
+                <!-- BUTTON -->
+                <button type="submit" name="simpan" class="btn btn-success">
+                    <i class="bi bi-check-circle"></i> Simpan
+                </button>
+                <a href="index.php" class="btn btn-secondary">Kembali</a>
+
+            </form>
         </div>
     </div>
-
-
-    </script>
-
 </div>
+
 </body>
 </html>
-
-<script>
-let currentStock = 0;
-
-document.addEventListener('DOMContentLoaded', function() {
-    const productSelect = document.querySelector('select[name="product_id"]');
-    const typeSelect = document.querySelector('select[name="transaction_type"]');
-    const totalInput = document.querySelector('#total');
-    const submitBtn = document.querySelector('button[name="simpan"]');
-    const warningDiv = document.querySelector('#stock-warning');
-
-    function validateForm() {
-        const productId = productSelect.value;
-        const type = typeSelect.value;
-        const total = parseInt(totalInput.value);
-
-        if (!productId || !type || !total || total <= 0) {
-            submitBtn.disabled = true;
-            return;
-        }
-
-        if (type === 'keluar' && total > currentStock) {
-            warningDiv.textContent = `Stock hanya ${currentStock}, tidak boleh keluar lebih dari stock!`;
-            warningDiv.style.display = 'block';
-            submitBtn.disabled = true;
-        } else {
-            warningDiv.style.display = 'none';
-            submitBtn.disabled = false;
-        }
-    }
-
-    productSelect.addEventListener('change', function() {
-        currentStock = parseInt(this.options[this.selectedIndex].dataset.stock) || 0;
-        validateForm();
-    });
-
-    typeSelect.addEventListener('change', validateForm);
-    totalInput.addEventListener('input', validateForm);
-
-    // Initial validation
-    validateForm();
-});
-
-document.querySelector('form').addEventListener('submit', function(e) {
-    if (submitBtn.disabled) {
-        e.preventDefault();
-        alert('Form tidak valid! Periksa input.');
-    }
-});
-</script>
-</html>
-
