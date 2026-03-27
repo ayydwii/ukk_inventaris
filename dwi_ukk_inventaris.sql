@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 18, 2026 at 06:48 AM
+-- Generation Time: Mar 27, 2026 at 08:18 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.16
 
@@ -32,22 +32,24 @@ CREATE TABLE `products` (
   `name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `stock` int DEFAULT NULL,
   `price` decimal(10,2) DEFAULT NULL,
-  `code` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL
+  `code` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `status` enum('aktif','nonaktif') COLLATE utf8mb4_general_ci DEFAULT 'aktif'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `name`, `stock`, `price`, `code`) VALUES
-(2, 'Celana', 225, 10000.00, '50'),
-(3, 'Baju', 90, 20000.00, '48'),
-(4, 'Tas Sekolah', 210, 200000.00, '12'),
-(5, 'Keychain', 700, 10000.00, '20'),
-(6, 'Kacamata', 220, 12000.00, '18'),
-(7, 'Laptop', 100, 1000000.00, '09'),
-(8, 'Sapu', 800, 25.00, '83'),
-(9, 'Sepatu', 700, 200000.00, '05');
+INSERT INTO `products` (`id`, `name`, `stock`, `price`, `code`, `status`) VALUES
+(2, 'Celana', 225, 10000.00, '50', 'aktif'),
+(3, 'Baju', 90, 20000.00, '48', 'aktif'),
+(4, 'Tas Sekolah', 210, 200000.00, '12', 'aktif'),
+(5, 'Keychain', 250, 10000.00, '20', 'aktif'),
+(6, 'Kacamata', 220, 12000.00, '18', 'aktif'),
+(7, 'Laptop', 100, 1000000.00, '09', 'aktif'),
+(8, 'Sapu', 800, 25.00, '83', 'nonaktif'),
+(9, 'Sepatu', 700, 200000.00, '05', 'aktif'),
+(10, 'Bola Kaki', 200, 1000.00, '001', 'nonaktif');
 
 -- --------------------------------------------------------
 
@@ -75,7 +77,8 @@ INSERT INTO `transactions` (`id`, `product_id`, `user_id`, `transaction_type`, `
 (4, 2, 1, 'keluar', 10, '2026-02-26 21:54:22'),
 (5, 5, 1, 'keluar', 600, '2026-03-09 02:57:39'),
 (6, 5, 1, 'masuk', 300, '2026-03-09 03:17:41'),
-(7, 9, 1, 'masuk', 200, '2026-03-17 21:07:00');
+(7, 9, 1, 'masuk', 200, '2026-03-17 21:07:00'),
+(8, 5, 1, 'keluar', 450, '2026-03-27 08:14:29');
 
 -- --------------------------------------------------------
 
@@ -129,13 +132,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `users`
