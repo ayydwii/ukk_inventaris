@@ -26,10 +26,10 @@ if (isset($_POST['simpan'])) {
     } else {
 
         // Cek produk aktif
-        $cek = mysqli_query($conn, "SELECT stock FROM products WHERE id = $product_id AND status='aktif'");
+$cek = mysqli_query($conn, "SELECT stock FROM products WHERE id = $product_id");
 
         if (mysqli_num_rows($cek) == 0) {
-            $_SESSION['error'] = "Produk tidak ditemukan atau sudah nonaktif!";
+$_SESSION['error'] = "Produk tidak ditemukan!";
         } else {
             $dataStock = mysqli_fetch_assoc($cek);
             $stok_sekarang = $dataStock['stock'];

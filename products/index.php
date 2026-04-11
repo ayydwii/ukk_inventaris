@@ -7,7 +7,17 @@ if (!isset($_SESSION['username'])) {
     exit;
 }
 
-$data = mysqli_query($conn, "SELECT * FROM products ORDER BY status ASC");
+$where = "";
+if (isset($_GET['cari']) && !empty($_GET['cari'])) {
+    $cari = mysqli_real_escape_string($conn, $_GET['cari']);
+    $where = "WHERE name LIKE '%$cari%' OR code LIKE '%$cari%'";
+}
+$sort = isset($_GET['sort']) ? $_GET['sort'] : 'status';
+$order = isset($_GET['order']) ? $_GET['order'] : 'ASC';
+$order_next = $order == 'ASC' ? 'DESC' : 'ASC';
+$orderby = "ORDER BY $sort $order, id DESC";
+
+$data = mysqli_query($conn, "SELECT * FROM products $where $orderby");
 ?>
 
 <!DOCTYPE html>
@@ -53,6 +63,32 @@ $data = mysqli_query($conn, "SELECT * FROM products ORDER BY status ASC");
     <h4 class="mb-1">Data Produk</h4>
     <p class="text-muted small mb-4">Kelola data produk inventaris</p>
     
+    <!-- Search Form -->
+    <form method="GET" class="row g-2 mb-4">
+        <div class="col-md-5">
+            <input type="text" name="cari" class="form-control" placeholder="Cari nama atau kode produk..." value="<?= htmlspecialchars($_GET['cari'] ?? '') ?>">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-search"></i> Cari
+            </button>
+            <a href="index.php" class="btn btn-secondary">Reset</a>
+        </div>
+        <div class="col-auto">
+            <div class="btn-group" role="group">
+                <a href="?cari=<?= urlencode($_GET['cari'] ?? '') ?>&sort=name&order=<?= $order_next ?>" class="btn btn-outline-primary <?= $sort == 'name' ? 'active' : '' ?>">
+                    Nama <i class="bi bi-arrow-<?= $order == 'ASC' ? 'up' : 'down' ?>-square"></i>
+                </a>
+                <a href="?cari=<?= urlencode($_GET['cari'] ?? '') ?>&sort=status&order=<?= $order_next ?>" class="btn btn-outline-primary <?= $sort == 'status' ? 'active' : '' ?>">
+                    Status <i class="bi bi-arrow-<?= $order == 'ASC' ? 'up' : 'down' ?>-square"></i>
+                </a>
+                <a href="?cari=<?= urlencode($_GET['cari'] ?? '') ?>&sort=stock&order=<?= $order_next ?>" class="btn btn-outline-primary <?= $sort == 'stock' ? 'active' : '' ?>">
+                    Stock <i class="bi bi-arrow-<?= $order == 'ASC' ? 'up' : 'down' ?>-square"></i>
+                </a>
+            </div>
+        </div>
+    </form>
+    
     <!-- Messages -->
     <?php if (isset($_SESSION['success'])): ?>
         <div class="alert alert-success"><?= $_SESSION['success']; ?></div>
@@ -73,13 +109,14 @@ $data = mysqli_query($conn, "SELECT * FROM products ORDER BY status ASC");
             <table class="table table-hover mb-0">
                 <thead>
                     <tr>
-                        <th class="text-center" style="width: 60px;">No</th>
+<th class="text-center" style="width: 60px;">No</th>
                         <th>Kode</th>
                         <th>Nama</th>
                         <th class="text-center">Stock</th>
-                        <th>Harga</th>
                         <th>Status</th>
-                        <th class="text-center" style="width: 180px;">Aksi</th>
+                        <th>Harga</th>
+                        <th class="text-center" style="width: 220px;">Aksi</th>
+
                     </tr>
                 </thead>
 
@@ -90,9 +127,6 @@ $data = mysqli_query($conn, "SELECT * FROM products ORDER BY status ASC");
                         <td><?= $row['code']; ?></td>
                         <td><?= $row['name']; ?></td>
                         <td class="text-center"><?= $row['stock']; ?></td>
-                        <td>Rp <?= number_format($row['price'], 0, ',', '.'); ?></td>
-
-                        <!-- STATUS -->
                         <td>
                             <?php if ($row['status'] == 'aktif') { ?>
                                 <span class="badge bg-success">Aktif</span>
@@ -100,6 +134,7 @@ $data = mysqli_query($conn, "SELECT * FROM products ORDER BY status ASC");
                                 <span class="badge bg-secondary">Nonaktif</span>
                             <?php } ?>
                         </td>
+                        <td>Rp <?= number_format($row['price'], 0, ',', '.'); ?></td>
 
                         <!-- AKSI -->
                         <td class="text-center">
@@ -112,7 +147,7 @@ $data = mysqli_query($conn, "SELECT * FROM products ORDER BY status ASC");
                             <?php if ($row['status'] == 'aktif') { ?>
                                 <!-- NONAKTIFKAN -->
                                 <a href="nonaktif.php?id=<?= $row['id']; ?>" 
-                                    class="btn btn-danger btn-sm"
+                                    class="btn btn-warning btn-sm"
                                     onclick="return confirm('Nonaktifkan produk ini?')">
                                     <i class="bi bi-x-circle"></i>
                                 </a>
@@ -124,6 +159,13 @@ $data = mysqli_query($conn, "SELECT * FROM products ORDER BY status ASC");
                                     <i class="bi bi-check-circle"></i>
                                 </a>
                             <?php } ?>
+
+                            <!-- HAPUS -->
+                            <a href="hapus.php?id=<?= $row['id']; ?>" 
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Yakin hapus produk ini? History transaksi tetap tersimpan!');">
+                               <i class="bi bi-trash"></i>
+                            </a>
 
                         </td>
                     </tr>

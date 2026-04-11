@@ -23,15 +23,15 @@ $pdf->Cell(40,8,'Tanggal',1);
 $pdf->Ln();
 
 $data = mysqli_query($conn,"
-SELECT t.*, p.name 
+SELECT t.*, COALESCE(p.name, t.product_name, 'Produk Dihapus') AS product_name
 FROM transactions t
-JOIN products p ON t.product_id=p.id
+LEFT JOIN products p ON t.product_id = p.id
 ");
 
 $no=1;
 while($row=mysqli_fetch_assoc($data)){
     $pdf->Cell(10,8,$no++,1);
-    $pdf->Cell(50,8,$row['name'],1);
+$pdf->Cell(50,8,$row['product_name'],1);
     $pdf->Cell(30,8,$row['transaction_type'],1);
     $pdf->Cell(30,8,$row['total'],1);
     $pdf->Cell(40,8,$row['date'],1);

@@ -25,19 +25,13 @@ if (mysqli_num_rows($cek) == 0) {
     exit;
 }
 
-// Cek apakah produk memiliki transaksi terkait
-$cek_transaksi = mysqli_query($conn, "SELECT * FROM transactions WHERE product_id = $id");
-if (mysqli_num_rows($cek_transaksi) > 0) {
-    $_SESSION['error'] = "Produk tidak dapat dihapus karena memiliki transaksi terkait!";
-    header("Location: index.php");
-    exit;
-}
+
 
 // Hapus produk
 $hapus = mysqli_query($conn, "DELETE FROM products WHERE id = $id");
 
 if ($hapus) {
-    $_SESSION['success'] = "Produk berhasil dihapus";
+$_SESSION['success'] = "Produk berhasil dihapus! History transaksi tetap tersimpan.";
 } else {
     $_SESSION['error'] = "Gagal menghapus produk: " . mysqli_error($conn);
 }

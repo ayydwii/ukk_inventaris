@@ -16,9 +16,9 @@ if (isset($_GET['dari']) && isset($_GET['sampai']) && $_GET['dari'] != "" && $_G
 }
 
 $data = mysqli_query($conn, "
-SELECT t.*, p.name 
+SELECT t.*, COALESCE(p.name, t.product_name, 'Produk Dihapus') AS product_name
 FROM transactions t
-JOIN products p ON t.product_id = p.id
+LEFT JOIN products p ON t.product_id = p.id
 $where
 ORDER BY t.date DESC
 ");
@@ -125,7 +125,7 @@ ORDER BY t.date DESC
                     <tbody>
                         <tr>
                             <td class="text-center"><?= $no++; ?></td>
-                            <td><?= $row['name']; ?></td>
+                            <td><?= $row['product_name']; ?></td>
                             <td class="text-center">
                                 <?php if($row['transaction_type'] == 'masuk'): ?>
                                     <span class="badge" style="background: #10B981;">Masuk</span>
